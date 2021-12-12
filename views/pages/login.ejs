@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../js/sessionActiveLogin'); %>
+        <%- include('../partials/head'); %>
+            <%- include('../js/loginScript'); %>
+</head>
+
+<body>
+    <div id="page-container">
+        <div id="content-wrap">
+            <header>
+                <a href="/" class="logo">Tus Noticias Bajio</a>
+            </header>
+
+            <!-- LOGIN -->
+            <div class="seccion-login">
+                <div class="caja-login">
+                    <h3>Iniciar Sesión</h3>
+                    <div class="mb-3">
+                        <label for="correo" class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="correo" name="correo" aria-describedby="emailHelp"
+                            required>
+                        <div id="emailHelp" class="form-text">Nunca compartiremos tu correo electrónico con nadie más.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        <div id="passwordHelp" class="form-text">
+                        </div>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Iniciar Sesión" id="iniciarSesion"></input>
+                </div>
+            </div>
+            <br>
+        </div>
+
+        <footer>
+            <%- include('../partials/footer'); %>
+        </footer>
+    </div>
+
+</body>
+
+</html>

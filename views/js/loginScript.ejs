@@ -1,0 +1,93 @@
+<script>
+    function iniciarSesion() {
+
+        let correo = $('#correo').val();
+        let password = $('#password').val();
+
+        if (isEmptyInput(correo, password) === false && validEmail(correo)) {
+
+            const data = { correo: correo, contraseña: password };
+
+            const options = {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }
+
+            fetch('/api/v1/usuarios/', options)
+                .then(response => response.json())
+                .then(data => {
+
+                    if (!data.validado) {
+                        if (data.error === 100) {
+                            $("#correo").addClass("is-invalid");
+                            $('#emailHelp').text(data.message);
+                        } else if (data.error === 101) {
+                            $("#correo").removeClass("is-invalid");
+                            $("#correo").addClass("is-valid");
+                            $('#emailHelp').text("Usuario válido.");
+
+                            $("#password").addClass("is-invalid");
+                            $('#passwordHelp').text(data.message);
+                        }
+                    } else if (data.validado) {
+                        $("#correo").removeClass("is-invalid");
+                        $("#correo").addClass("is-valid");
+                        $('#emailHelp').text("Usuario válido.");
+
+                        $("#password").removeClass("is-invalid");
+                        $("#password").addClass("is-valid");
+                        $('#passwordHelp').text("Contraseña válida.");
+
+                        //inicia variables de sesión
+                        localStorage.setItem('user', data.user);
+                        localStorage.setItem('externo', data.externo);
+
+                        //redirect to
+                        window.location.href = '/';
+                    }
+                });
+        }
+    }
+
+    function isEmptyInput(correo, password) {
+
+        if (correo.length === 0) {
+            $("#correo").addClass("is-invalid");
+            $('#emailHelp').text("Ingresa un correo válido.");
+        }
+
+        if (password.length === 0) {
+            $("#password").addClass("is-invalid");
+            $('#passwordHelp').text("Contraseña no válida.");
+        }
+
+        if (correo.length !== 0 && password.length !== 0) {
+            $("#correo").removeClass("is-invalid");
+            $("#password").removeClass("is-invalid");
+            return false;
+        }
+        return true;
+    }
+
+    function validEmail(correo) {
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let result = emailRegex.test(correo);
+        if (result) {
+            $("#correo").removeClass("is-invalid");
+            return true;
+        } else {
+            $("#correo").addClass("is-invalid");
+            $('#emailHelp').text("Formato de correo electrónico no válido.");
+            return false;
+        }
+    }
+
+    $(document).ready(function () {
+        $("#iniciarSesion").click(function () {
+            iniciarSesion();
+        });
+    });
+</script>

@@ -1,0 +1,262 @@
+<script>
+
+    var hijos = "";
+    var knownParentChild = [];
+    var commentsString = "";
+    var parent_dir = 0;
+    var idnota = "";
+
+    //Función recursiva, concatena todos los hijos de un comentario inicial
+    //para renderizarlos en la sección de comentarios
+    function buscarHijos(rows, child, parent) {
+
+        var currentRow = [];
+
+        //Casos base
+        //No es padre y ya ha sido insertado
+        if (isParent(rows, child) === false && isKnownParentChild(child, parent)) {
+            return;
+        }
+        //No es padre y no ha sido insertado
+        if (isParent(rows, child) === false && isKnownParentChild(child, parent) === false) {
+            knownParentChild.push({ "padre": parent, "child": child });
+            //hijos += "Registro: " + " Hijo: " + child + " ,Padre: " + parent + "\n";
+            currentRow = getRow(rows, child, parent);
+
+            //comentario inicial
+            if (parent === 0) {
+                commentsString += "<div class='card'>"
+                    + "<div class='card-body'><div class='card-title'>"
+                    + "<strong>#" + currentRow.idcomentario + " <p id='n" + currentRow.idcomentario + "'>" + currentRow.nombre
+                    + " " + currentRow.apepaterno + " " + currentRow.apematerno + "</p></strong>"
+                    + " <p class='card-subtitle mb-2 text-muted miembro'>" + currentRow.externo + "</p>"
+                    + "</div>"
+                    + "<div class='card-text'>" + currentRow.comentario + "</div>"
+                    + "<div class='card-footer'><p style='float:left'>" + currentRow.fechadecreacion
+                    + "</p><button type='button' class='btn btn-warning sm responder' style='float:right' id='" + currentRow.idcomentario + "'>Responder</button>"
+                    + "</div></div></div>";
+            } else {
+                commentsString += "<div class='respuesta'><div class='card'>"
+                    + "<div class='card-body'><div class='card-title'>"
+                    + "<strong>#" + currentRow.idcomentario + " <p id='n" + currentRow.idcomentario + "'>" + currentRow.nombre
+                    + " " + currentRow.apepaterno + " " + currentRow.apematerno + "</strong>"
+                    + " <p class='card-subtitle mb-2 text-muted miembro'>" + currentRow.externo + "</p>"
+                    + "</div>"
+                    + "<h6 class='card-subtitle mb-2 text-muted'>Respondio a: #" + currentRow.parent_dir
+                    + " " + currentRow.respondionombre + " " + currentRow.respondioapepaterno
+                    + " " + currentRow.respondioapematerno + "</h6>"
+                    + "<div class='card-text'>" + currentRow.comentario + "</div>"
+                    + "<div class='card-footer'><p style='float:left'>" + currentRow.fechadecreacion
+                    + "</p><button type='button' class='btn btn-warning sm responder' style='float:right' id='" + currentRow.idcomentario + "'>Responder</button>"
+                    + "</div></div></div></div>";
+            }
+            return;
+
+        } else if (isParent(rows, child) && isKnownParentChild(child, parent)) {
+            return;
+        }
+        else if (isParent(rows, child) && isKnownParentChild(child, parent) === false) {
+            knownParentChild.push({ "padre": parent, "child": child });
+            currentRow = getRow(rows, child, parent);
+            //hijos += "Registro: " + " Hijo: " + child + " ,Padre: " + parent + "\n";
+
+            //Comentario inicial
+            if (parent === 0) {
+                commentsString += "<div class='card'>"
+                    + "<div class='card-body'><div class='card-title'>"
+                    + "<strong>#" + currentRow.idcomentario + " <p id='n" + currentRow.idcomentario + "'>" + currentRow.nombre
+                    + " " + currentRow.apepaterno + " " + currentRow.apematerno + "</strong>"
+                    + " <p class='card-subtitle mb-2 text-muted miembro'>" + currentRow.externo + "</p>"
+                    + "</div>"
+                    + "<div class='card-text'>" + currentRow.comentario + "</div>"
+                    + "<div class='card-footer'><p style='float:left'>" + currentRow.fechadecreacion
+                    + "</p><button type='button' class='btn btn-warning sm responder' style='float:right' id='" + currentRow.idcomentario + "'>Responder</button>"
+                    + "</div></div></div>";
+            } else {
+                commentsString += "<div class='respuesta'><div class='card'>"
+                    + "<div class='card-body'><div class='card-title'>"
+                    + "<strong>#" + currentRow.idcomentario + " <p id='n" + currentRow.idcomentario + "'>" + currentRow.nombre
+                    + " " + currentRow.apepaterno + " " + currentRow.apematerno + "</strong>"
+                    + " <p class='card-subtitle mb-2 text-muted miembro'>" + currentRow.externo + "</p>"
+                    + "</div>"
+                    + "<h6 class='card-subtitle mb-2 text-muted'>Respondio a: #" + currentRow.parent_dir
+                    + " " + currentRow.respondionombre + " " + currentRow.respondioapepaterno
+                    + " " + currentRow.respondioapematerno + "</h6>"
+                    + "<div class='card-text'>" + currentRow.comentario + "</div>"
+                    + "<div class='card-footer'><p='float:left'>" + currentRow.fechadecreacion
+                    + "</p><button type='button' class='btn btn-warning sm responder' style='float:right' id='" + currentRow.idcomentario + "'>Responder</button>"
+                    + "</div></div></div></div></div>";
+            }
+
+            //Llamar a todos los hijos
+            for (var j = 0; j < rows.length; j++) {
+                if (child === rows[j].parent_dir) {
+                    buscarHijos(rows, rows[j].idcomentario, child);
+                }
+            }
+        }
+    }
+
+    function isParent(rows, parent) {
+
+        for (var i = 0; i < rows.length; i++) {
+            //Es padre y no esta registrado
+            if (rows[i].parent_dir === parent && isKnownParentChild(rows[i].parent_dir, rows[i].idcomentario) === false) {
+                return true;
+            }
+            //Es padre y esta registrado
+            else if (rows[i].parent_dir === parent && isKnownParentChild(rows[i].parent_dir, rows[i].idcomentario)) {
+                return false
+            }
+        }
+        return false;
+    }
+
+    //Si par padre-hijo ya ha sido registrado
+    function isKnownParentChild(parent, child) {
+
+        for (var i = 0; i < knownParentChild.length; i++) {
+
+            if (knownParentChild[i].padre === parent
+                && knownParentChild[i].child === child) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //Sustituye 0 con: Miembro de tus noticias bajio
+    //para renderizar en página
+    function replaceExterno(array) {
+
+        for (var i = 0; i < array.length; i++) {
+            if (array[i].externo === 0) {
+                array[i].externo = "Miembro de Tus Noticias Bajio"
+            } else {
+                array[i].externo = "";
+            }
+        }
+
+    }
+
+    async function setComentarios(idnota) {
+
+        const promise = await fetch('/api/v1/nota/' + idnota + '/comentarios/');
+        const comentarios = await promise.json();
+
+        replaceExterno(comentarios.rows);
+
+        for (var i = 0; i < comentarios.rows.length; i++) {
+
+            //por cada comentario base (no es respuesta de otro comentario)
+            //buscarlo y a sus hijos
+            if (comentarios.rows[i].parent_dir === 0) {
+                buscarHijos(comentarios.rows, comentarios.rows[i].idcomentario, comentarios.rows[i].parent_dir);
+            }
+        }
+
+        //renderiza cadena de comentarios en nota.ejs
+        $('#comentarios').append(commentsString);
+
+        //agrega acción centrar vista en fin de página
+        //a elementos con clase .responder
+        //agrega a elemento #respondiendo
+        //el nombre de usuario al que se responde
+        //al responder un comentario
+        $('.responder').click(function () {
+            $(document).scrollTop($(document).height());
+            parent_dir = this.id;
+            let nombre = $('#n' + this.id).text();
+            $('#respondiendo').attr('hidden', false);
+            $('#respondiendo').text("Respondiendo a: #" + this.id + " " + nombre);
+        });
+    };
+
+    function getRow(rows, child, parent) {
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i].idcomentario === child && rows[i].parent_dir === parent) {
+                return rows[i];
+            }
+        }
+    }
+
+    function validateComentario() {
+
+        const comentario = $('#comentario-area').val().trim();
+
+        //comentario vacío
+        if (comentario.length === 0) {
+            console.log("Valgo cero bro");
+            $('#comentario-area').addClass('is-invalid');
+            $('#comentarioHelp').text("Tú comentario debe contener al menos un carácter.");
+            return false;
+        }
+        return true;
+    }
+
+    function resetComentario() {
+        $('#respondiendo').text("");
+        $('#respondiendo').attr("hidden", true);
+        $('#comentario-area').val("");
+        $('#comentario-area').removeClass('is-invalid');
+        $('#comentarioHelp').text("");
+        parent_dir = "";
+    }
+
+    function insertComentario() {
+
+        if (validateComentario()) {
+
+            //idnota ha sido establecido al cargar la página
+            //parent_dir es 0 por default y es actualizado si se responde a un comentario
+            let comentario = $('#comentario-area').val().trim();
+            let idusuario = localStorage.getItem('user').trim();
+
+            const data = {
+                idnota: idnota,
+                idusuario: idusuario,
+                comentario: comentario,
+                parent_dir: parent_dir
+            }
+
+            const options = {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }
+
+            fetch('/api/v1/comentario/', options)
+                .then(response => response.json())
+                .then(data => { console.log(data) });
+        }
+    }
+
+    $(document).ready(function () {
+
+        //oculta caja de comentario si no hay usuario activo
+        if (localStorage.getItem('user') !== null) {
+            $('#seccion-comentarios').attr('hidden', false);
+        }
+
+        idnota = $('#idnota').text().trim();
+        //carga comentarios de nota cargada en página
+        setComentarios(idnota);
+
+        $('#cancelar').click(function () {
+            resetComentario();
+        });
+
+        $('#comentar').click(function () {
+            insertComentario();
+        });
+
+    });
+
+
+
+
+
+
+</script>

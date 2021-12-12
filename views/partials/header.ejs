@@ -1,0 +1,24 @@
+<a href="/" class="logo">Tus Noticias Bajio</a>
+<ul class="navigation" id="navigation">
+  <li><a href="#">Acerca De</a></li>
+  <li><a href="#">Contacto</a></li>
+  <li><a href="#">Últimas Noticias</a></li>
+</ul>
+
+<script>
+  $(document).ready(function () {
+
+    if (localStorage.getItem('user') !== null) {
+      $('#navigation').append('<li><a href="/" id="sesion">Cerrar Sesión</a></li>');
+      $("#sesion").click(function () {
+        cerarSesion();
+      });
+    } else {
+      $('#navigation').append('<li><a href="/login" id="sesion">Iniciar Sesión</a></li>');
+    }
+  });
+
+  function cerarSesion() {
+    localStorage.clear();
+  }
+</script>

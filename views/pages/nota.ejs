@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head'); %>
+        <%- include('../js/notaScript'); %>
+</head>
+
+<body>
+    <div id="page-container">
+        <div id="content-wrap">
+            <header>
+                <%- include('../partials/header'); %>
+            </header>
+
+            <!-- Diseño de nota completa -->
+            <div class="container">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h2>
+                                #<p style='display:inline' id="idnota">
+                                    <%= nota.idnota%>
+                                </p>
+                                <p style='display:inline'>
+                                    <%= nota.titulo %>
+                                </p>
+                            </h2>
+                            <h6>
+                                <%= nota.fechadecreacion %>
+                            </h6>
+                        </div>
+                        <div class="card-text">
+                            <img class="img" src="/public/img/noticias.jpg" alt="">
+                            <br>
+                            <%= nota.descripcion %>
+                                <br><br>
+                                <hr>
+                                <h6>
+                                    <p>Autor: <%= nota.nombre %>
+                                            <%= nota.apepaterno %>
+                                                <%= nota.apematerno %>
+                                    </p>
+                                </h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <!-- Los comentarios son renderizados aquí -->
+            <div class="container" id="comentarios">
+                <h3>Comentarios:</h3>
+                <br>
+
+            </div>
+            <br>
+
+            <!--DISEÑO DE CAJA DE COMENTARIOS-->
+
+            <div class="seccion-comentarios" id="seccion-comentarios" name="id-comentarios" hidden="true">
+
+                <div class="caja-comentario">
+                    <div class="form-group">
+                        <p>Tú comentario:</p>
+                        <label for="comentario-area" id="respondiendo" class='card-subtitle mb-2 text-muted'
+                            hidden='true'></label>
+                        <textarea class="form-control" rows="2" id="comentario-area"></textarea>
+                        <div id="comentarioHelp" class="form-text invalid-feedback"></div>
+                    </div>
+                    <hr>
+                    <button type="submit" class="btn btn-primary btn-sm" id="comentar">Comentar</button>
+                    <button type="button" class="btn btn-danger btn-sm" id="cancelar">Cancelar</button>
+                </div>
+            </div>
+
+            <br>
+
+        </div>
+
+        <footer>
+            <%- include('../partials/footer'); %>
+        </footer>
+    </div>
+
+</body>
+
+</html>

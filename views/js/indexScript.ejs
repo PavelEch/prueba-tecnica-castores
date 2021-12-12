@@ -1,0 +1,59 @@
+<script>
+
+    async function insertNota() {
+
+        if (validateTitulo()) {
+
+            let titulo = $('#tituloDeNota').val().trim();
+            let descripcion = $('#cuerpoDeNota').val().trim();
+            let idusuario = localStorage.getItem('user').trim();
+
+            const data = {
+                titulo: titulo,
+                descripcion: descripcion,
+                idusuario: idusuario
+            }
+
+            const options = {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }
+
+            const response = await fetch('/api/v1/nota/', options);
+            const json = await response.json();
+        }
+    }
+
+    function validateTitulo() {
+
+        let titulo = $('#tituloDeNota').val().trim();
+
+        if (titulo.length === 0 || titulo.length < 10) {
+            $('#tituloDeNota').addClass('is-invalid');
+            $('#tituloHelp').text("Ingresa un título válido de al menos 10 caracteres.");
+            return false;
+        } else {
+            $('#tituloDeNota').removeClass('is-invalid');
+            $('#tituloHelp').text("");
+            return true;
+        }
+    }
+
+    $(document).ready(function () {
+
+        $('#submitNota').click(function () {
+            insertNota();
+        });
+
+        //oculta creación de nota si no es usuario interno
+        if (localStorage.getItem('user') !== null && localStorage.getItem('externo') !== null) {
+            if (localStorage.getItem('externo') === 'false') {
+                $('#creacion-nota').removeAttr('hidden');
+            }
+        }
+    });
+
+</script>
