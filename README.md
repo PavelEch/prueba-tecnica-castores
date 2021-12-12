@@ -1,10 +1,10 @@
 # Proyecto prueba para entrevista
 
 # Enunciado:
-    La empresa necesita para su portal web un sistema de noticias, en el cual se permita publicar varias notas (solo personal interno de la empresa) y a estas se les permita hacer comentarios por cualquier usuario registrado. Es necesario que a cualquier comentario se le pueda dar respuesta (por cualquier otro usuario).
+La empresa necesita para su portal web un sistema de noticias, en el cual se permita publicar varias notas (solo personal interno de la empresa) y a estas se les permita hacer comentarios por cualquier usuario registrado. Es necesario que a cualquier comentario se le pueda dar respuesta (por cualquier otro usuario).
 
 # Objetivo general:
-    Desarrollar una aplicación web para un portal de notas que permita registrar nuevas notas (si es usuario interno), permita visualizar las notas y los comentarios realizados en esta, en la sección de comentarios cualquier usuario podrá comentar y responder a otros usuarios.
+Desarrollar una aplicación web para un portal de notas que permita registrar nuevas notas (si es usuario interno), permita visualizar las notas y los comentarios realizados en esta, en la sección de comentarios cualquier usuario podrá comentar y responder a otros usuarios.
 	
 # Requerimientos funcionales:
 1. RF1 CREAR NOTAS: El usuario interno puede crear notas en la aplicación, estas son cargadas en la página principal.
@@ -35,7 +35,7 @@
 
 1. Levantar una instancia de base de datos MySQL
 
-2. En base de datos MySQL crear base de datos: "pavel" e importar el archivo de base de datos anexado en este proyecto: "" 
+2. En base de datos MySQL crear base de datos: "pavel" e importar el archivo de base de datos anexado en este proyecto: "pavel_basededatos" 
 
 3. Desde la carpeta del proyecto ejecutar el comando "npm-install" para instalar las dependencias del proyecto
 
